@@ -22,12 +22,9 @@ function App() {
   const swapCurrency = () => {
 
     const tmp = inputSelectState;
-    inputSelectState = outputSelectState;
-    outputSelectState = tmp;
+    setoutputSelectState(tmp);
+    setinputSelectState(outputSelectState);
   }
-
-
-
 
   return (
     <div className="container">

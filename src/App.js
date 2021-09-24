@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Currensy from './Currensy.json';
 import './App.css';
+import CurrensyList from './components/CurrensyList';
 
 
 function App() {
@@ -13,16 +14,14 @@ function App() {
 
   const calcResult = () => {
     let result = value / getCurrentSelectedRate(inputSelectState) * getCurrentSelectedRate(outputSelectState);
-    return result.toFixed(2);
+    return Number.isInteger(result) ? result : result.toFixed(2);
   }
   const getCurrentSelectedRate = (selectData) => {
-    let currentSelectedValue = currencyArr.filter(item => item.code == selectData);
+    let currentSelectedValue = currencyArr.filter(item => item.code == selectData);    
     return currentSelectedValue[0].rate;
   }
   const swapCurrency = () => {
-
-    const tmp = inputSelectState;
-    setoutputSelectState(tmp);
+    setoutputSelectState(inputSelectState);
     setinputSelectState(outputSelectState);
   }
 
@@ -31,9 +30,7 @@ function App() {
       <h1>Currency Converter</h1>
       <div className="input-box">
         <form>
-          <select id="in" className="selector" value={inputSelectState} onChange={event => setinputSelectState(event.target.value)}>
-            {Currensy.exchangeRates.map(item => (<option value={item.code} data-rate={item.rate}>{item.code}</option>))}
-          </select>
+          <CurrensyList state={inputSelectState} setState={setinputSelectState} arr={currencyArr} />
           <input type="text" maxLength="6" defaultValue="0" className="input-form" id="inputValue" onChange={event => setvalue(event.target.value)}></input>
         </form>
       </div>
@@ -41,9 +38,7 @@ function App() {
       <button className="btn" onClick={swapCurrency}>swap</button>
       <div className="input-box">
         <form>
-          <select id="out" className="selector" value={outputSelectState} onChange={event => setoutputSelectState(event.target.value)}>
-            {Currensy.exchangeRates.map(item => (<option value={item.code} data-rate={item.rate}>{item.code}</option>))}
-          </select>
+          <CurrensyList state={outputSelectState} setState={setoutputSelectState} arr={currencyArr} />
           <input type="text" maxLength="6" value={calcResult()} className="input-form" id="outputValue" disabled></input>
         </form>
       </div>
